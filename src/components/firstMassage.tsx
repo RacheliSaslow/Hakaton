@@ -5,25 +5,30 @@ import {
   TextField,
   Button,
   Paper,
+  Alert,
 } from "@mui/material";
 import CheckingData from "./CheckingData";
 import SuccessMessage from "././SuccessMessage";
+import { sendAnalysisData } from "../services/analysisService";
 
 type FormData = {
-  name: string;
-  phone: string;
+  first_name: string;
+  last_name: string;
   email: string;
+  phone?: string;
 };
 
 export default function FirstMassage() {
     const [step, setStep] = useState<"form" | "loading" | "success">("form");
   const [form, setForm] = useState<FormData>({
-    name: "",
-    phone: "",
+    first_name: "",
+    last_name: "",
     email: "",
+    phone: "",
   });
 
   const [errors, setErrors] = useState<Partial<FormData>>({});
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const handleChange = (field: keyof FormData, value: string) => {
     setForm({ ...form, [field]: value });
@@ -32,8 +37,8 @@ export default function FirstMassage() {
   const validate = () => {
     const newErrors: Partial<FormData> = {};
 
-    if (!form.name) newErrors.name = "יש להזין שם";
-    if (!form.phone) newErrors.phone = "יש להזין טלפון";
+    if (!form.first_name) newErrors.first_name = "יש להזין שם פרטי";
+    if (!form.last_name) newErrors.last_name = "יש להזין שם משפחה";
     if (!form.email || !form.email.includes("@"))
       newErrors.email = "מייל לא תקין";
 
@@ -42,14 +47,27 @@ export default function FirstMassage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
-  if (!validate()) return;
+  const handleSubmit = async () => {
+    if (!validate()) return;
 
-  setStep("loading");
+    setStep("loading");
+    setErrorMessage("");
 
-  setTimeout(() => {
-    setStep("success");
-  }, 2000); 
+    try {
+      await sendAnalysisData({
+        first_name: form.first_name,
+        last_name: form.last_name,
+        email: form.email,
+        phone: form.phone,
+      });
+
+      setStep("success");
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error ? error.message : "שגיאה בשליחת הנתונים"
+      );
+      setStep("form");
+    }
   };
 if (step === "loading") return <CheckingData />;
 if (step === "success") return <SuccessMessage />;
@@ -86,15 +104,22 @@ if (step === "success") return <SuccessMessage />;
           הרשמה למערכת
         </Typography>
 
-        {/* שם */}
+        {/* הודעת שגיאה */}
+        {errorMessage && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {errorMessage}
+          </Alert>
+        )}
+
+        {/* שם פרטי */}
         <TextField
           fullWidth
-          label="שם מלא"
+          label="שם פרטי"
           variant="outlined"
-          value={form.name}
-          onChange={(e) => handleChange("name", e.target.value)}
-          error={!!errors.name}
-          helperText={errors.name}
+          value={form.first_name}
+          onChange={(e) => handleChange("first_name", e.target.value)}
+          error={!!errors.first_name}
+          helperText={errors.first_name}
           sx={{
             mb: 2,
             "& .MuiOutlinedInput-root": {
@@ -112,15 +137,15 @@ if (step === "success") return <SuccessMessage />;
           }}
         />
 
-        {/* טלפון */}
+        {/* שם משפחה */}
         <TextField
           fullWidth
-          label="טלפון"
+          label="שם משפחה"
           variant="outlined"
-          value={form.phone}
-          onChange={(e) => handleChange("phone", e.target.value)}
-          error={!!errors.phone}
-          helperText={errors.phone}
+          value={form.last_name}
+          onChange={(e) => handleChange("last_name", e.target.value)}
+          error={!!errors.last_name}
+          helperText={errors.last_name}
           sx={{
             mb: 2,
             "& .MuiOutlinedInput-root": {
@@ -147,6 +172,30 @@ if (step === "success") return <SuccessMessage />;
           onChange={(e) => handleChange("email", e.target.value)}
           error={!!errors.email}
           helperText={errors.email}
+          sx={{
+            mb: 2,
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 3,
+            },
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#e53935",
+            },
+            "&:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#e53935",
+            },
+            "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#e53935",
+            },
+          }}
+        />
+
+        {/* טלפון (אופציונלי) */}
+        <TextField
+          fullWidth
+          label="טלפון (אופציונלי)"
+          variant="outlined"
+          value={form.phone}
+          onChange={(e) => handleChange("phone", e.target.value)}
           sx={{
             mb: 3,
             "& .MuiOutlinedInput-root": {

@@ -1,4 +1,5 @@
 import Dashboard from "../components/Dashboard";
+import FirstMassage from "../components/firstMassage";
 // import CandidateDetails from "../components/CandidateDetails";
 // import CandidatesTable from "../components/CandidatesTable";
 
@@ -59,6 +60,7 @@ const data = {
 export default function CandidatePage() {
   return (
     <>
+      <FirstMassage />
       <Dashboard data={data} />
     </>
   );
