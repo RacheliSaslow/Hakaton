@@ -31,7 +31,6 @@ type Candidate = {
 };
 type Props = {
   data?: Candidate[];
-  rawData?: any;
 };
 
 type Status = {
@@ -59,10 +58,9 @@ const columns = [
   { icon: <InfoIcon sx={{ color: "#e53935", fontSize: 16 }} />, label: "סטטוס" },
 ];
 
-export default function CandidatesTable({ data, rawData }: Props) {
+export default function CandidatesTable({ data }: Props) {
   const navigate = useNavigate();
   const [candidates, setCandidates] = useState<Candidate[]>(data || []);
-  const [apiData, setApiData] = useState<CandidateResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>("");
 
@@ -79,7 +77,6 @@ export default function CandidatesTable({ data, rawData }: Props) {
       setError("");
       try {
         const response = await fetchCandidatesList();
-        setApiData(response);
 
         // המרת הנתונים לפורמט של Candidate
         const convertedData = response.map((item) => ({
