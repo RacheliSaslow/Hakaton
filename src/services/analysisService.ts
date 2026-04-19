@@ -5,18 +5,12 @@ type AnalysisPayload = {
   phone?: string;
 };
 
-export const sendAnalysisData = async (data: AnalysisPayload) => {
-  const payload = {
-    first_name: data.first_name,
-    last_name: data.last_name,
-    email: data.email,
-    ...(data.phone && { phone: data.phone }),
-  };
+const BASE_URL = "https://3fy7gs-8080.csb.app";
 
+export const sendAnalysisData = async (payload: AnalysisPayload): Promise<any> => {
   try {
-    console.log("📤 Starting fetch request with payload:", payload);
-
-    const response = await fetch("/analyze", {
+    console.log("🚀 Sending data to server:", payload);
+    const response = await fetch(`${BASE_URL}/analyze`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

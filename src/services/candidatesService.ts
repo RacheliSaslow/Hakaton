@@ -39,18 +39,36 @@ export type CandidateResponse = {
 const BASE_URL = "https://candicheck-last-agent.onrender.com";
 
 export const fetchCandidatesList = async (): Promise<CandidateResponse[]> => {
-  const response = await fetch(`${BASE_URL}/candidates`, {
-    method: "GET",
+  const response = await fetch(`${BASE_URL}/analyze`, {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
+    body: JSON.stringify({
+      social_profile: {
+        analysis_result: {
+          candidate_name: "מערכת",
+          summary: "בקשת רשימה"
+        }
+      },
+      interaction_profile: {
+        scores: {
+          communication_score: 10,
+          confidence_score: 10
+        },
+        qualitative_data: {
+          ai_insight: "בקשת נתונים"
+        }
+      }
+    }),
   });
 
   if (!response.ok) {
     throw new Error(`שגיאה בשרת: ${response.statusText}`);
   }
 
-  return response.json();
+  const result = await response.json();
+  return Array.isArray(result) ? result : [result];
 };
 
 export const analyzeCandidateProfile = async (
