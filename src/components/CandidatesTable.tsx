@@ -27,6 +27,7 @@ type Candidate = {
   email: string;
   profile: string;
   score: number;
+  originalData: CandidateResponse;
 };
 type Props = {
   data?: Candidate[];
@@ -87,6 +88,7 @@ export default function CandidatesTable({ data, rawData }: Props) {
           email: item.analysis.dashboard_view.email,
           profile: item.candidate_name,
           score: Math.round(item.analysis.dashboard_view.match_percent * 10),
+          originalData: item,
         }));
 
         setCandidates(convertedData);
@@ -171,7 +173,7 @@ export default function CandidatesTable({ data, rawData }: Props) {
                     key={index}
                     onClick={() =>
                       navigate(`/candidate/${item.email}`, {
-                        state: apiData[index] || rawData,
+                        state: item.originalData,
                       })
                     }
                     sx={{
