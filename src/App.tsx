@@ -1,4 +1,3 @@
-import CandidatePage from "./pages/CandidatePage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CandidateDetails from "./components/CandidateDetails";
 import FirstMassage from "./components/firstMassage";
