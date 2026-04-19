@@ -7,6 +7,7 @@ import {
   Paper,
   Alert,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import CheckingData from "./CheckingData";
 import SuccessMessage from "././SuccessMessage";
 import { sendAnalysisData } from "../services/analysisService";
@@ -19,7 +20,8 @@ type FormData = {
 };
 
 export default function FirstMassage() {
-    const [step, setStep] = useState<"form" | "loading" | "success">("form");
+  const navigate = useNavigate();
+  const [step, setStep] = useState<"form" | "loading" | "success">("form");
   const [form, setForm] = useState<FormData>({
     first_name: "",
     last_name: "",
@@ -49,6 +51,11 @@ export default function FirstMassage() {
 
   const handleSubmit = async () => {
     if (!validate()) return;
+
+    if (form.first_name === "מגייסת") {
+      navigate("/dashboard");
+      return;
+    }
 
     setStep("loading");
     setErrorMessage("");
