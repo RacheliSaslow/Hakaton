@@ -5,7 +5,7 @@ type AnalysisPayload = {
   phone?: string;
 };
 
-const BASE_URL = "https://3fy7gs-8080.csb.app";
+const BASE_URL = "https://syf8cp-8080.csb.app";
 
 export const sendAnalysisData = async (payload: AnalysisPayload): Promise<any> => {
   try {
