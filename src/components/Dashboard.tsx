@@ -30,36 +30,14 @@ export const getStatus = (score: number): Status => {
   return { text: "בינוני", color: "warning", reason: "התאמה בינונית" };
 };
 
-export default function Dashboard({ data }: Props) {
+export default function Dashboard() {
   const [search, setSearch] = useState("");
 
-const candidates: Candidate[] = [
-  {
-    name: data.dashboard_view.full_name,
-    phone: data.dashboard_view.phone,
-    email: data.dashboard_view.email,
-    profile: "Frontend",
-    score: data.dashboard_view.match_percent,
-  },
-];
-
   const filteredData = useMemo(() => {
-    const q = search.toLowerCase().trim();
-
-    return candidates.filter((item) => {
-      const status = getStatus(item.score);
-
-      return (
-        status.text.toLowerCase().includes(q) ||
-        status.reason.toLowerCase().includes(q) ||
-        item.score.toString().includes(q)
-      );
-    });
-  }, [candidates, search]);
-
-  const sortedData = useMemo(() => {
-    return [...filteredData].sort((a, b) => b.score - a.score);
-  }, [filteredData]);
+    // Note: CandidatesTable now fetches its own data from server
+    // Search filtering logic might need to move to CandidatesTable if search is global
+    return []; 
+  }, []);
 
   return (
     <Box
@@ -89,7 +67,7 @@ const candidates: Candidate[] = [
 
         <SearchBar search={search} setSearch={setSearch} />
 
-        <CandidatesTable data={sortedData} rawData={data} />
+        <CandidatesTable />
 
       </Box>
     </Box>

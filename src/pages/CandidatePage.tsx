@@ -61,7 +61,7 @@ export default function CandidatePage() {
   return (
     <>
       <FirstMassage />
-      <Dashboard data={data} />
+      <Dashboard/>
     </>
   );
 }

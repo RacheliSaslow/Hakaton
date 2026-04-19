@@ -5,6 +5,7 @@ import FirstMassage from "./components/firstMassage";
 import SuccessMessage from "./components/SuccessMessage";
 import CheckingData from "./components/CheckingData";
 import NegativeMessage from "./components/NegativeMessage";
+import Dashboard from "./components/Dashboard";
 import "./App.css";
 
 function App() {
@@ -12,7 +13,8 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<CandidatePage />} />
+          <Route path="/" element={<FirstMassage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/candidate/:email" element={<CandidateDetails />} />
           <Route path="/firstMassage" element = {<FirstMassage/>}/>
           <Route path="/SuccessMessage" element = {<SuccessMessage/>}/>
